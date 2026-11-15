@@ -1,0 +1,378 @@
+@font-face {
+  font-family: 'Suisse Intl';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/assets/SuisseIntl-Regular.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Suisse Intl';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/assets/SuisseIntl-SemiBold.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Suisse Intl';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/assets/SuisseIntl-Medium.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Suisse Intl';
+  font-style: normal;
+  font-weight: 450;
+  font-display: swap;
+  src: url('/assets/SuisseIntl-Book.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Handflair';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/assets/Handflair.otf') format('opentype');
+}
+:root {
+  color-scheme: light;
+  --font-family: 'Suisse Intl', sans-serif;
+  font-family: var(--font-family);
+  color: #000;
+  background: #fff;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+* { box-sizing: border-box; }
+html { scrollbar-gutter: stable; }
+html.is-restoring-scroll { overflow-anchor: none; scroll-behavior: auto; }
+html.has-work-overlay { overflow: hidden; overflow-anchor: none; }
+.work-overlay { position: fixed; inset: 0; z-index: 30; overflow: auto; overscroll-behavior: contain; scrollbar-gutter: stable; background: #fff; }
+.work-overlay[hidden] { display: none; }
+.work-overlay:focus { outline: none; }
+*, *::before, *::after { font-family: inherit; }
+body { margin: 0; }
+/* Keep native navigation, with a brief crossfade where supported. */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition { navigation: auto; }
+  ::view-transition-group(root) { animation-duration: 180ms; }
+  ::view-transition-old(root) { animation: page-fade-out 180ms ease both; }
+  ::view-transition-new(root) { animation: page-fade-in 180ms ease both; }
+}
+@keyframes page-fade-out { to { opacity: 0; } }
+@keyframes page-fade-in { from { opacity: 0; } }
+button, a { -webkit-tap-highlight-color: transparent; }
+button, input, select, textarea { font: inherit; }
+button, .button { touch-action: manipulation; font-weight: 500; }
+button:focus-visible, a:focus-visible { outline: 3px solid #6d5dfc; outline-offset: 6px; }
+.studio { min-height: 1200px; padding: 165px 24px 50px; overflow: clip; }
+.intro { text-align: center; }
+.availability { display: flex; justify-content: center; align-items: center; gap: 10px; margin: 0; font-size: 20px; line-height: 24px; }
+.status-dot { position: relative; display: grid; place-items: center; flex: none; width: 18px; height: 18px; border-radius: 50%; }
+.status-dot::before { content: ''; position: absolute; inset: 0; border-radius: inherit; background: #000; animation: availability-pulse 1.2s var(--ease-out) infinite; }
+.status-dot::after { content: ''; position: relative; width: 8px; height: 8px; border-radius: 50%; background: #000; }
+@keyframes availability-pulse {
+  0% { transform: scale(0.45); opacity: 0.2; }
+  70%, 100% { transform: scale(1.25); opacity: 0; }
+}
+h1 { max-width: 788px; margin: 20px auto 20px; font-size: 56px; font-weight: 600; line-height: 65px; letter-spacing: -0.56px; }
+.subtitle { margin: 0; font-size: 20px; line-height: 24px; }
+.button { display: inline-flex; align-items: center; justify-content: center; border: 0; border-radius: 60px; padding: 12px 20px; min-height: 46px; color: #fff; font-size: 18px; font-weight: 500; line-height: 22px; letter-spacing: -0.18px; white-space: nowrap; text-decoration: none; cursor: pointer; }
+/* Fit the new Figma actions into the existing intro height. */
+.project-actions { display: flex; justify-content: center; align-items: flex-start; gap: 10px; margin-top: 48px; padding-bottom: 7px; }
+.contact-button { padding: 14px 24px; min-height: 51px; line-height: 23px; letter-spacing: 0; color: #000; background: #f6f6f6; transition: background-color 160ms ease; }
+.contact-button:disabled { cursor: default; }
+.booking-page { display: flex; align-items: center; width: min(1100px, calc(100% - 40px)); min-height: 100svh; margin-inline: auto; padding: 112px 0; }
+.cal-embed { width: 100%; overflow: auto; }
+@media (max-width: 760px) {
+  .booking-page { width: calc(100% - 24px); }
+}
+@media (hover: hover) and (pointer: fine) {
+  .contact-button:hover { background-color: #eaeaea; }
+  .work:hover .work-button::before { opacity: 0.16; }
+}
+
+/* The stage keeps the Figma geometry; the wrapper scales it for smaller screens. */
+.work { display: block; position: relative; width: min(900px, 100%); height: 306px; margin: 100px auto 0; isolation: isolate; color: inherit; text-decoration: none; cursor: pointer; border-radius: 24px; touch-action: manipulation; }
+.work-stage { position: absolute; top: 0; left: 50%; width: 900px; height: 306px; margin-left: -450px; perspective: 1200px; }
+.work-card { position: absolute; padding: var(--frame); border-radius: calc(var(--card-radius) + var(--frame)); background: rgb(255 255 255 / 30%); backface-visibility: hidden; transform-origin: center; }
+.card-surface { position: relative; width: 100%; height: 100%; overflow: hidden; border-radius: var(--card-radius); isolation: isolate; }
+.is-loading::before { content: ''; position: absolute; inset: 0; border-radius: inherit; background-color: #f4f4f4; background-image: linear-gradient(135deg, transparent calc(50% - 0.5px), #e5e5e5 50%, transparent calc(50% + 0.5px)), linear-gradient(45deg, transparent calc(50% - 0.5px), #e5e5e5 50%, transparent calc(50% + 0.5px)); box-shadow: inset 0 0 0 1px #e5e5e5; pointer-events: none; }
+.work-card img { display: block; width: 100%; height: 100%; object-fit: cover; user-select: none; }
+.card-left { --frame: 1.799px; --card-radius: 10.791px; left: 68.69px; top: 38.47px; width: 426.977px; height: 240.175px; transform: rotate(-7.39deg); }
+.card-right { --frame: 1.799px; --card-radius: 11.69px; left: 469.9px; top: 29.06px; width: 422.227px; height: 237.503px; transform: rotate(4.13deg); }
+.card-center { --frame: 8.093px; --card-radius: 12.59px; left: 206.30px; top: 12.15px; width: 485.583px; height: 273.141px; background: #fff; transform: rotate(-2.66deg); }
+.sheen { position: absolute; inset: -30% -60%; pointer-events: none; background: linear-gradient(110deg, transparent 37%, rgb(255 255 255 / 3%) 43%, rgb(255 255 255 / 22%) 49%, rgb(255 255 255 / 3%) 55%, transparent 61%); opacity: 0; transform: translateX(-65%); }
+.card-left, .card-right { z-index: 0; }
+.card-center { z-index: 1; }
+.work-button { transition: background-color 160ms ease; position: absolute; z-index: 2; left: 50%; top: 122.6px; transform: translateX(-50%); background: rgb(0 0 0 / 50%); backdrop-filter: blur(14.35px); -webkit-backdrop-filter: blur(14.35px); }
+.work-button::before { content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit; background: #000; opacity: 0; pointer-events: none; transition: opacity 160ms ease; }
+
+/* app.js writes transforms directly to each card, preserving spring velocity
+   when the hover or pointer direction changes. The button remains stationary. */
+.platforms { margin: 98px auto 0; text-align: center; }
+.platforms p { margin: 0; color: rgb(0 0 0 / 40%); font-size: 16px; line-height: 20.8px; letter-spacing: 0.32px; }
+.platform-logos { display: flex; align-items: center; justify-content: center; gap: 28px; margin-top: 20px; opacity: 0.3; }
+.platform-logos img { display: block; flex: none; }
+
+/* Figma 113:1372. Preserve the desktop spacing after the existing hero. */
+.complexity { min-height: 1026px; margin-top: -30px; padding-inline: 20px; }
+.section-heading { margin: 0 auto; font-size: 48px; font-weight: 500; line-height: 1.2; letter-spacing: -0.48px; text-align: center; }
+.complexity .section-heading { max-width: 424px; }
+.pill-stage { position: relative; width: min(424px, 100%); aspect-ratio: 424 / 404; margin-inline: auto; container-type: inline-size; }
+.pill-stage[data-physics] { overflow: clip; }
+.skill-pills { position: absolute; inset: 0 auto auto 0; width: 424px; height: 404px; margin: 0; padding: 0; list-style: none; transform: scale(calc(100cqw / 424px)); transform-origin: top left; }
+.skill-pill { position: absolute; top: 0; left: 0; padding: 14px 24px; border-radius: 60px; background: #f6f6f6; font-size: 18px; line-height: 23px; font-weight: 400; white-space: nowrap; transform-origin: center; }
+/* The Figma arrangement is also the no-JS and reduced-motion fallback. */
+.pill-figma { left: 328.49px; top: 262.22px; transform: translate(-50%, -50%) rotate(13.16deg); }
+.pill-spine { left: 197.3px; top: 254.04px; transform: translate(-50%, -50%) rotate(-12.16deg); }
+.pill-engine { left: 140px; top: 301px; }
+.pill-math { left: 353.56px; top: 381.49px; transform: translate(-50%, -50%) rotate(-7.87deg); }
+.pill-sfx { left: 81px; top: 319.68px; transform: translate(-50%, -50%) rotate(7.57deg); }
+.pill-stage[data-physics="waiting"] .skill-pill { visibility: hidden; }
+.pill-stage[data-physics="running"] .skill-pill { will-change: transform; }
+.services { padding: 0 20px 361.2px; }
+.services .section-heading { max-width: 472px; }
+.service-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; width: min(720px, 100%); margin: 53px auto 0; }
+.service-card { min-height: 352px; padding: 73px 43px 46px 46px; border-radius: 24px; background: #fafafa; }
+.service-icon { display: flex; align-items: flex-start; height: 50px; padding-top: 2px; }
+.service-icon img { display: block; flex: none; }
+.service-spine .service-icon { padding: 5px 0 0 5px; }
+.service-sfx .service-icon { padding-top: 0; }
+.service-math .service-icon { padding-top: 8px; }
+.service-card h3, .service-card p { margin: 0; font-size: 18px; line-height: 23px; font-weight: 400; }
+.service-card h3 { max-width: 234px; min-height: 68px; }
+.service-card:first-child h3 { max-width: 215px; }
+.service-card p { color: rgb(0 0 0 / 60%); }
+.studio-achievements { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; width: min(720px, 100%); margin: 59px auto 0; }
+.studio-stat { display: flex; align-items: flex-start; justify-self: start; gap: 10px; margin-left: 29px; }
+.studio-stat + .studio-stat { margin-left: 68px; }
+.stat-copy { text-align: center; }
+.stat-number { position: relative; margin: 0; font-size: 48px; font-weight: 500; line-height: 1.2; letter-spacing: -0.48px; white-space: nowrap; }
+/* The final text reserves the exact width and remains readable by assistive tech. */
+.stat-final { opacity: 0; }
+.stat-count { position: absolute; inset: 0; }
+.stat-label { margin: 10px 0 0; color: rgb(0 0 0 / 60%); font-size: 21px; line-height: 1.2; letter-spacing: -0.21px; white-space: nowrap; }
+.stat-laurel { display: block; flex: none; width: 48px; height: 62px; transform-origin: 85% 100%; }
+.stat-laurel img { display: block; width: 48px; height: 62px; object-position: bottom; }
+.stat-laurel-right { transform-origin: 15% 100%; }
+.stat-laurel-right img { transform: scaleX(-1); }
+.studio-achievements[data-motion="waiting"] .stat-laurel { opacity: 0; }
+@media (max-width: 760px) {
+  .complexity { margin-top: 0; min-height: auto; padding-bottom: 200px; }
+  .section-heading { font-size: clamp(30px, 8vw, 40px); letter-spacing: -0.01em; }
+  .complexity .section-heading { max-width: 354px; }
+  .services { padding-bottom: 124px; }
+  .services .section-heading { max-width: 390px; }
+  .service-grid { margin-top: 44px; }
+  .service-card { padding: 40px 26px; }
+  .studio-stat, .studio-stat + .studio-stat { justify-self: center; margin-left: 0; gap: 6px; }
+  .stat-number { font-size: clamp(26px, 5.6vw, 42px); letter-spacing: -0.01em; }
+  .stat-laurel { width: 36px; height: 47px; }
+  .stat-laurel img { width: 36px; height: 47px; }
+  .stat-label { font-size: 18px; letter-spacing: -0.18px; }
+}
+@media (max-width: 600px) {
+  .complexity { padding-bottom: 160px; }
+  .service-grid { grid-template-columns: 1fr; max-width: 352px; }
+  .service-card { min-height: 320px; padding: 55px 36px 36px; }
+  .studio-achievements { grid-template-columns: 1fr; gap: 40px; max-width: 352px; margin-top: 48px; }
+  .stat-number { font-size: 42px; }
+  .studio-stat, .studio-stat + .studio-stat { gap: 10px; }
+  .stat-laurel { width: 48px; height: 62px; }
+  .stat-laurel img { width: 48px; height: 62px; }
+}
+
+/* Figma 115:1581: original portrait proportions and 56px team gutters. */
+.team { padding: 0 20px 288px; }
+.team-members { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 56px; width: min(610.116px, 100%); margin: 72.4px auto 0; padding: 0; list-style: none; transform: translateX(-10.942px); }
+.team-member { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; min-width: 0; }
+.team-portrait { position: relative; flex: none; width: calc(var(--portrait-width) * 1px); max-width: 100%; aspect-ratio: var(--portrait-width) / var(--portrait-height); container-type: inline-size; }
+/* Scale the complete export; leave the SVG's intrinsic dimensions untouched. */
+.team-portrait img { display: block; position: absolute; top: 0; left: 0; transform: scale(calc(100cqw / (var(--portrait-width) * 1px))); transform-origin: top left; }
+.team-caption { text-align: center; }
+.team-caption h3 { margin: 0; font-size: 21px; font-weight: 450; line-height: 1.2; letter-spacing: -0.21px; }
+.team-caption p { margin: 6px 0 0; color: rgb(0 0 0 / 60%); font-size: 18px; line-height: 1.2; letter-spacing: -0.18px; white-space: nowrap; }
+.team-member:last-child { align-items: flex-start; gap: 10px; }
+.team-member:last-child .team-caption { min-width: 131px; }
+@media (max-width: 760px) {
+  .team { padding-bottom: 148px; }
+  .team-members { gap: 40px 28px; margin-top: 52px; transform: none; }
+  .team-member:last-child { align-items: center; gap: 16px; }
+}
+@media (max-width: 600px) {
+  .team-members { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px 24px; max-width: 352px; }
+  .team-portrait { max-width: min(100%, 145px); }
+  .team-caption p { font-size: 16px; letter-spacing: -0.16px; }
+}
+
+/* Figma 116:2263: 352px squares above one 720px-wide testimonial. */
+.testimonials { padding: 208px 20px 418px; }
+.testimonial-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; width: min(720px, 100%); margin: 48.4px auto 0; transform: translateX(-4px); }
+.testimonial-card { position: relative; min-width: 0; height: 352px; margin: 0; overflow: hidden; border-radius: 24px; background: #fafafa; }
+.signature { position: absolute; left: 38px; top: 34px; margin: 0; font-family: 'Handflair', sans-serif; font-size: 48px; font-weight: 400; line-height: 1.24; white-space: nowrap; color: rgb(0 0 0 / 60%); }
+.testimonial-card:nth-child(2) .signature { left: 41px; }
+.signature svg { display: none; position: absolute; left: 0; top: 0; overflow: visible; fill: currentColor; }
+.signature[data-motion="waiting"] .signature-label,
+.signature[data-motion="drawing"] .signature-label { opacity: 0; }
+.signature[data-motion="waiting"] svg,
+.signature[data-motion="drawing"] svg { display: block; }
+.signature-pen { fill: none; stroke: #fff; stroke-width: 36; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; }
+.testimonial-mark { position: absolute; left: 42px; top: 199px; font-size: 32px; font-weight: 500; line-height: normal; opacity: .4; }
+.testimonial-card blockquote { position: absolute; left: 42px; top: 241px; width: 266px; max-width: calc(100% - 80px); margin: 0; font-size: 18px; font-weight: 450; line-height: 23px; }
+.testimonial-card:first-child blockquote { width: 215px; }
+.testimonial-wide { grid-column: 1 / -1; }
+.testimonial-wide .signature { left: 49px; }
+.testimonial-wide .testimonial-mark { left: 53px; top: 156px; font-size: 56px; }
+.testimonial-wide blockquote { left: 53px; top: 229px; width: 422px; font-size: 32px; line-height: 1.1; }
+@media (max-width: 760px) {
+  .testimonials { padding-top: 0; padding-bottom: 160px; }
+  .testimonial-grid { margin-top: 48px; transform: none; }
+}
+@media (max-width: 600px) {
+  .testimonial-grid { grid-template-columns: 1fr; max-width: 352px; }
+  .testimonial-wide .signature { left: 38px; }
+  .testimonial-wide .testimonial-mark { left: 42px; top: 156px; }
+  .testimonial-wide blockquote { left: 42px; top: 216px; font-size: 24px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .signature[data-motion] .signature-label { opacity: 1; }
+  .signature[data-motion] svg { display: none; }
+}
+
+/* Figma 117:2665, with the requested compact charcoal treatment. */
+.pricing { display: grid; place-items: center; min-height: 640px; padding: 140px 20px; background: #252525; color: #fff; }
+.pricing-content { width: min(478px, 100%); margin-inline: auto; text-align: center; }
+.pricing-heading > span { display: block; white-space: nowrap; }
+.price-old { position: relative; display: inline-block; }
+.price-old del { text-decoration: none; }
+.price-strike { position: absolute; top: .553em; left: -.087em; width: 3.50073em; height: 3px; transform: rotate(2.78deg); pointer-events: none; }
+.price-strike > span { display: block; height: 100%; background: #fff; transform-origin: left center; }
+.price-new { position: absolute; top: .594em; left: .41em; z-index: 1; min-width: 4.14656em; padding: .166667em .416667em; border-radius: 124px; background: #404040; line-height: 1.2; transform: rotate(-4.76deg); transform-origin: 50% 65%; white-space: nowrap; }
+.pricing-offer { margin: 69.8px 0 0; font-size: 20px; line-height: 24px; }
+.pricing-clock { display: inline-block; min-width: 4.2em; font-variant-numeric: tabular-nums; text-align: left; }
+.pricing-actions { margin-top: 48px; padding-bottom: 0; }
+.pricing-actions .contact-button { color: #fff; background: #555; }
+.pricing-content[data-motion="waiting"] .price-strike > span { clip-path: inset(0 100% 0 0); }
+.pricing-content[data-motion="waiting"] .price-new { opacity: 0; }
+@media (hover: hover) and (pointer: fine) {
+  .pricing-actions .contact-button:hover { background: #454545; }
+}
+@media (max-width: 760px) {
+  .pricing { min-height: 520px; padding-block: 112px; }
+  .pricing-heading { font-size: clamp(28px, 7.8vw, 40px); }
+  .pricing-offer { margin-top: 64px; font-size: 18px; }
+  .pricing-actions { margin-top: 40px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pricing-content[data-motion] .price-strike > span { clip-path: inset(0); }
+  .pricing-content[data-motion] .price-new { opacity: 1; }
+}
+
+/* Figma 117:2763, with a more compact FAQ type and spacing scale. */
+.faq { padding: 298px 20px 196px; }
+.faq-inner { width: min(720px, 100%); margin-inline: auto; }
+.faq-list { display: grid; gap: 24px; margin-top: 64px; }
+.faq-item { border-radius: 24px; background: #fafafa; transition: background-color 160ms ease; }
+.faq-item summary { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 30px 32px 30px 40px; border-radius: inherit; list-style: none; font-size: 22px; font-weight: 450; line-height: 1.5; letter-spacing: -.22px; cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::marker { content: ''; }
+.faq-item summary img { display: block; flex: none; transition: transform 200ms var(--ease-out); }
+.faq-item:not([data-expanded])[open] summary img,
+.faq-item[data-expanded="true"] summary img { transform: rotate(180deg); }
+.faq-panel { overflow: hidden; opacity: 1; transition: height 200ms var(--ease-out), opacity 200ms var(--ease-out); }
+.faq-item[data-expanded="false"] .faq-panel { opacity: 0; }
+.faq-instant .faq-panel, .faq-instant summary img { transition: none; }
+.faq-item summary:focus-visible { outline: 3px solid #6d5dfc; outline-offset: 4px; }
+.faq-answer { padding: 0 32px 30px 40px; color: rgb(0 0 0 / 70%); font-size: 22px; font-weight: 450; line-height: 1.6; letter-spacing: -.22px; }
+.faq-answer p { margin: 0; }
+.faq-answer a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 4px; }
+@media (hover: hover) and (pointer: fine) {
+  .faq-item:has(> summary:hover) { background: #f2f2f2; }
+}
+@media (max-width: 760px) {
+  .faq { padding: 144px 20px 160px; }
+  .faq-list { gap: 16px; margin-top: 44px; }
+  .faq-item { border-radius: 22px; }
+  .faq-item summary { gap: 16px; padding: 22px; font-size: 18px; letter-spacing: -.18px; }
+  .faq-answer { padding: 0 22px 22px; font-size: 17px; line-height: 1.65; letter-spacing: -.17px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .faq-item, .faq-item summary img, .faq-panel { transition: none; }
+}
+
+/* Figma 104:204: 1173px gallery, 36px rows, 24px character gutter. */
+.work-page { width: min(1173px, calc(100% - 40px)); margin-inline: auto; padding: 47px 0 338px; }
+.work-gallery { display: grid; gap: 36px; }
+.gallery-panel, .character-panel { position: relative; overflow: hidden; border-radius: 0; background: #fff; }
+.gallery-panel { aspect-ratio: 1173 / 660; }
+.gallery-panel::after, .character-panel::after { content: ''; position: absolute; inset: 0; border: 1px solid #eaeaea; border-radius: inherit; pointer-events: none; }
+.gallery-panel img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; }
+.gallery-panel-first { background: #fafafa; }
+.gallery-panel-first::after { display: none; }
+.gallery-panel-first img { left: calc(-3 / 1173 * 100%); top: calc(-2 / 660 * 100%); width: calc(1180 / 1173 * 100%); height: calc(664 / 660 * 100%); }
+.gallery-characters { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+.character-panel { aspect-ratio: 574.5 / 662; }
+.character-vector { position: absolute; left: calc(102.666667 / 574.5 * 100%); top: calc(54.499 / 662 * 100%); width: calc(369.333 / 574.5 * 100%); aspect-ratio: 369.333 / 554; container-type: inline-size; transform: scaleX(-1); }
+/* Scale the exported SVG as a whole, preserving its intrinsic dimensions. */
+.character-vector img { display: block; transform: scale(calc(100cqw / 369.333px)); transform-origin: top left; }
+.character-render { position: absolute; left: calc(99.5 / 574.5 * 100%); top: calc(48 / 662 * 100%); width: calc(376.926 / 574.5 * 100%); height: calc(565.02 / 662 * 100%); object-fit: cover; }
+.work-close { position: fixed; z-index: 10; left: 50%; bottom: calc(38px + env(safe-area-inset-bottom, 0px)); translate: -50% 0; display: grid; place-items: center; width: 72px; height: 72px; border-radius: 60px; background: rgb(0 0 0 / 50%); backdrop-filter: blur(14.35px); -webkit-backdrop-filter: blur(14.35px); touch-action: manipulation; transition: background-color 160ms ease; }
+.work-close img { display: block; }
+.floating-work { width: auto; padding-inline: 28px; opacity: 0; transform: translateY(16px); visibility: hidden; pointer-events: none; transition: background-color 160ms ease, opacity 160ms var(--ease-out), transform 220ms var(--ease-out), visibility 0s 220ms; }
+.floating-work.is-visible { opacity: 1; transform: translateY(0); visibility: visible; pointer-events: auto; transition: background-color 160ms ease, opacity 180ms var(--ease-out), transform 240ms var(--ease-out), visibility 0s; }
+@starting-style {
+  .floating-work.is-visible { opacity: 0; transform: translateY(16px); }
+}
+.floating-work[hidden] { display: none; }
+@media (hover: hover) and (pointer: fine) {
+  .work-close:hover { background-color: rgb(0 0 0 / 65%); }
+}
+@media (max-width: 760px) {
+  .work-page { padding: 24px 0 148px; }
+  .work-gallery { gap: 20px; }
+  .gallery-characters { gap: 12px; }
+  .work-close { bottom: calc(24px + env(safe-area-inset-bottom, 0px)); }
+}
+
+/* Figma frame 96:2: 1920 × 1200. Preserve the original layer alignment,
+   including the deliberately off-center work label, at desktop sizes. */
+@media (min-width: 1001px) {
+  .availability { width: 242px; margin-inline: auto; justify-content: flex-start; white-space: nowrap; }
+  .intro h1 { position: relative; left: 0.1328125px; }
+  .subtitle { position: relative; left: -0.5px; width: 241px; margin-inline: auto; white-space: nowrap; }
+  .work-button { left: calc(50% - 4.3671875px); min-width: 129px; }
+  .platforms { position: relative; left: 0.06640625px; width: 235.8671875px; }
+  .platforms p { width: 344px; margin-left: -54.06640625px; line-height: 21px; white-space: nowrap; }
+  .platform-logos { height: 50px; }
+}
+
+@media (max-width: 1000px) {
+  .studio { min-height: 100svh; padding-top: 80px; }
+  .work { width: 720px; height: 245px; margin-top: 80px; }
+  .work-stage { transform: scale(0.8); transform-origin: top center; }
+  .work-button { top: 93px; }
+  .platforms { margin-top: 76px; }
+}
+@media (max-width: 760px) {
+  .studio { padding: 60px 20px 36px; }
+  .availability { font-size: 16px; line-height: 22px; }
+  h1 { font-size: clamp(32px, 6.2vw, 48px); line-height: 1.12; letter-spacing: -0.6px; margin-top: 22px; }
+  .subtitle { font-size: 17px; }
+  .project-actions { margin-top: 31px; padding-bottom: 0; }
+  .contact-button { padding-inline: clamp(18px, 5vw, 24px); }
+  .work { width: 100%; height: calc((100vw - 40px) * 0.34); margin-top: 70px; }
+  .work-stage { transform: scale(calc((100vw - 40px) / 900px)); }
+  .work-button { top: 50%; transform: translate(-50%, -50%); font-size: 16px; padding: 10px 18px; }
+  .platforms { margin-top: 64px; }
+  .platforms p { font-size: 14px; letter-spacing: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .work-close { transition: none; }
+  .floating-work { transform: none; transition: opacity 120ms ease, visibility 0s 120ms; }
+  .floating-work.is-visible { transform: none; transition: opacity 120ms ease, visibility 0s; }
+  @starting-style { .floating-work.is-visible { transform: none; } }
+  .status-dot::before { animation: none; transform: none; opacity: 0.09; }
+  .contact-button { transition: none; }
+  .work .sheen { display: none; }
+  .work-button { transition: background-color 150ms ease; }
+}

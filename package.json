@@ -1,0 +1,13 @@
+{
+  "name": "graaf-studio",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "node server.cjs",
+    "build": "npm run check && node scripts/build.cjs",
+    "check": "node --check app.js && node --check media.js && node --check booking.js && node --check pills.js && node --check achievements.js && node --check signatures.js && node --check pricing.js && node --check faq.js && node --check work-overlay.js && node --check server.cjs"
+  },
+  "dependencies": {
+    "matter-js": "0.20.0"
+  }
+}
